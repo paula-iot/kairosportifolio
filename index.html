@@ -1687,7 +1687,34 @@
 
 <script>
   /* ─── STATE ──────────────────────────── */
-  let projects = JSON.parse(localStorage.getItem('wi_projects') || '[]');
+  const defaultProjects = [
+    {
+      id: 'p1',
+      name: 'Luana Nodari Psicologia',
+      category: 'Psicologia',
+      desc: 'Site institucional para psicóloga clínica.',
+      url: 'http://luananodaripsicologia.com.br/',
+      image: ''
+    },
+    {
+      id: 'p2',
+      name: 'Pocket House Eventos',
+      category: 'Eventos',
+      desc: 'Site de espaço para eventos.',
+      url: 'https://pockethouse.vercel.app/',
+      image: ''
+    },
+    {
+      id: 'p3',
+      name: 'Clínica de Psicologia Nodari',
+      category: 'Clínica',
+      desc: 'Site institucional para clínica de psicologia.',
+      url: 'https://clinicadepsicologianodari.com.br/',
+      image: ''
+    }
+  ];
+  const extraProjects = JSON.parse(localStorage.getItem('wi_projects') || '[]');
+  let projects = [...defaultProjects, ...extraProjects];
   let adminMode = false;
   let editingId = null;
 
