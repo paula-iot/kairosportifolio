@@ -947,6 +947,37 @@
 
     .modal-close:hover { background: #E4E4E7; }
 
+    /* ─── FORM GROUP ────────────────────────────────────────── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink2);
+    }
+
+    .form-group input {
+      padding: 10px 14px;
+      border: 1.5px solid rgba(24,24,27,.15);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      border-color: var(--teal);
+      background: var(--white);
+    }
+
     /* ─── TOAST ─────────────────────────────────────────────── */
     .toast {
       position: fixed;
@@ -976,7 +1007,7 @@
       margin-top: 16px;
     }
 
-    .admin-mode .admin-actions { display: flex; flex-wrap: wrap; }
+    .admin-actions.admin-mode { display: flex; flex-wrap: wrap; }
 
     .btn-sm {
       padding: 8px 16px;
@@ -1608,15 +1639,15 @@
       <h3 id="modalTitle">Adicionar projeto</h3>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <form id="projectForm" onsubmit="saveProject(event)">
+    <form id="projectForm">
       <input type="hidden" id="editingId" value="" />
       <div class="form-group">
         <label>Nome do projeto *</label>
-        <input type="text" id="pName" placeholder="Ex: Barbearia do João" required />
+        <input type="text" id="pName" placeholder="Ex: Barbearia do João" />
       </div>
       <div class="form-group">
         <label>Categoria *</label>
-        <input type="text" id="pCategory" placeholder="Ex: Barbearia, Clínica, Loja..." required />
+        <input type="text" id="pCategory" placeholder="Ex: Barbearia, Clínica, Loja..." />
       </div>
       <div class="form-group">
         <label>Descrição curta</label>
@@ -1624,14 +1655,14 @@
       </div>
       <div class="form-group">
         <label>URL do site (link "ver projeto")</label>
-        <input type="url" id="pUrl" placeholder="https://..." />
+        <input type="text" id="pUrl" placeholder="https://..." />
       </div>
       <div class="form-group">
         <label>URL da imagem de capa</label>
-        <input type="url" id="pImage" placeholder="https://... (jpg, png)" />
+        <input type="text" id="pImage" placeholder="https://... (jpg, png)" />
       </div>
       <div style="display:flex;gap:12px;margin-top:8px;">
-        <button type="submit" class="btn btn-teal" style="flex:1;justify-content:center;">Salvar projeto</button>
+        <button type="button" class="btn btn-teal" onclick="saveProject()" style="flex:1;justify-content:center;">Salvar projeto</button>
         <button type="button" class="btn btn-outline" onclick="closeModal()" style="flex:1;justify-content:center;">Cancelar</button>
       </div>
     </form>
@@ -1701,16 +1732,18 @@
   }
 
   /* ─── SAVE / DELETE ──────────────────── */
-  function saveProject(e) {
-    e.preventDefault();
+  function saveProject() {
+    const name = document.getElementById('pName').value.trim();
+    const category = document.getElementById('pCategory').value.trim();
+    if (!name || !category) { showToast('Preencha nome e categoria.', 'error'); return; }
     const id = document.getElementById('editingId').value || Date.now().toString();
     const project = {
       id,
-      name:     document.getElementById('pName').value.trim(),
-      category: document.getElementById('pCategory').value.trim(),
-      desc:     document.getElementById('pDesc').value.trim(),
-      url:      document.getElementById('pUrl').value.trim(),
-      image:    document.getElementById('pImage').value.trim(),
+      name,
+      category,
+      desc:  document.getElementById('pDesc').value.trim(),
+      url:   document.getElementById('pUrl').value.trim(),
+      image: document.getElementById('pImage').value.trim(),
     };
 
     const idx = projects.findIndex(p => p.id === id);
